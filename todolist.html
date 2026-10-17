@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do List App</title>
+    <style>
+        /* CSS for Styling */
+        body {
+            background-color: #f4f7f6;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .todo-container {
+            background: #ffffff;
+            width: 400px;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            margin-top: 0;
+            color: #333;
+            text-align: center;
+        }
+        .input-section {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        #taskInput {
+            flex: 1;
+            padding: 12px;
+            font-size: 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        #taskInput:focus {
+            border-color: #3822b4;
+        }
+        #addBtn {
+            padding: 12px 20px;
+            font-size: 1rem;
+            background-color: #da8f20;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.2s;
+        }
+        #addBtn:hover {
+            background-color: #5413bd;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            background: #f9f9f9;
+            margin-bottom: 8px;
+            border-radius: 8px;
+            border-left: 5px solid #2196f3;
+            cursor: pointer;
+            user-select: none;
+            transition: all 0.2s;
+        }
+        li:hover {
+            background: #1e46c9;
+        }
+        /* Class applied when a task is checked off */
+        li.completed {
+            border-left-color: #9e9e9e;
+            text-decoration: line-through;
+            color: #888;
+            opacity: 0.7;
+        }
+        .delete-btn {
+            background: none;
+            border: none;
+            color: #ff5252;
+            font-size: 1.2rem;
+            cursor: pointer;
+            font-weight: bold;
+            padding: 0 5px;
+        }
+        .delete-btn:hover {
+            color: #d32f2f;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- HTML Layout -->
+    <div class="todo-container">
+        <h2>My Tasks</h2>
+        <div class="input-section">
+            <input type="text" id="taskInput" placeholder="Add a new task..." autocomplete="off">
+            <button id="addBtn" onclick="addTask()">Add</button>
+        </div>
+        <ul id="taskList"></ul>
+    </div>
+
+    <!-- JavaScript Logic -->
+    <script>
+        const taskInput = document.getElementById('taskInput');
+        const taskList = document.getElementById('taskList');
+
+        // Add a new task to the list
+        function addTask() {
+            const taskText = taskInput.value.trim();
+            
+            // Prevent adding empty items
+            if (taskText === '') return;
+
+            // 1. Create the list item (li)
+            const li = document.createElement('li');
+            
+            // 2. Add text structure inside the li
+            li.innerHTML = `
+                <span class="task-text">${taskText}</span>
+                <button class="delete-btn">&times;</button>
+            `;
+
+            // 3. Click event to toggle "completed" styling
+            li.addEventListener('click', function(e) {
+                // Ensure clicking the delete button doesn't trigger a toggle
+                if (e.target.classList.contains('delete-btn')) return;
+                li.classList.toggle('completed');
+            });
+
+            // 4. Click event for the delete button to remove the item
+            const deleteBtn = li.querySelector('.delete-btn');
+            deleteBtn.addEventListener('click', function() {
+                li.remove();
+            });
+
+            // 5. Append the complete list item to the list container
+            taskList.appendChild(li);
+
+            // 6. Reset the input box
+            taskInput.value = '';
+        }
+
+        // Allow pressing the 'Enter' key to add tasks
+        taskInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                addTask();
+            }
+        });
+    </script>
+</body>
+</html>
